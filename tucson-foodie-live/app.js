@@ -1,8 +1,8 @@
 // Tucson Foodie AI Restaurant Discovery Assistant
-// Powered by Gemini 2.0 Flash
+// Powered by Gemini 2.5 Flash
 
 // Configuration
-const GEMINI_API_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent';
+const GEMINI_API_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 const API_KEY_STORAGE = 'tucsonFoodieApiKey';
 const DEMO_API_KEY = 'AIzaSyC2Dx-duvGW3YwkMhLf9AQHgWKRIiFh0Ps'; // Heavily throttled demo key
 
@@ -19,7 +19,207 @@ let state = {
     showFilters: false,
     viewMode: 'list',
     expandedCards: {},
-    copiedAddress: ''
+    copiedAddress: '',
+    searchCache: new Map(),
+    searchDebounceTimer: null
+};
+
+// Preloaded demo results
+const PRELOADED_RESULTS = {
+    interpretedQuery: {
+        searchType: "cuisine",
+        cuisineTypes: ["mexican", "tacos"],
+        features: ["tacos", "authentic"],
+        priceRange: "any",
+        location: "general",
+        timeConstraints: [],
+        dietary: []
+    },
+    recommendations: [
+        {
+            name: "El Charro Café Downtown",
+            address: "311 N Court Ave, Tucson, AZ 85701",
+            neighborhood: "Downtown",
+            priceRange: "$",
+            cuisine: "Mexican",
+            matchScore: 98,
+            rating: 4.5,
+            reviewSummary: "Historic Tucson institution serving authentic Sonoran-style Mexican cuisine since 1922",
+            atmosphere: "Traditional Mexican",
+            specialties: ["Carne Seca Tacos", "Chimichanga", "Tableside Guacamole"],
+            dietaryOptions: {
+                glutenFree: true,
+                glutenFreeDetails: "Corn tortillas available, many naturally gluten-free options",
+                vegan: false,
+                vegetarian: true
+            },
+            features: ["outdoor patio", "full bar", "historic location", "mariachi on weekends"],
+            hours: {
+                today: "11am-9pm",
+                open: true,
+                happyHour: "3-6pm weekdays"
+            },
+            tucsonFoodie: {
+                hasVoucher: true,
+                voucherAmount: "$20 off",
+                voucherFrequency: "every 6 months",
+                latestArticle: "El Charro's Famous Carne Seca Recipe"
+            },
+            currentDeals: ["Taco Tuesday specials", "Happy hour margaritas 3-6pm"],
+            whyRecommended: "Tucson's oldest Mexican restaurant, invented the chimichanga, legendary carne seca tacos",
+            phone: "(520) 622-1922",
+            website: "elcharrocafe.com",
+            parkingInfo: "Street parking and nearby garage",
+            reservations: "Recommended for dinner"
+        },
+        {
+            name: "Penca",
+            address: "50 E Broadway Blvd, Tucson, AZ 85701",
+            neighborhood: "Downtown",
+            priceRange: "$",
+            cuisine: "Latin American",
+            matchScore: 95,
+            rating: 4.6,
+            reviewSummary: "Modern Latin cuisine with creative taco offerings and craft mezcal program",
+            atmosphere: "Upscale Casual",
+            specialties: ["Tacos de Hongos", "Duck Carnitas Tacos", "Pescado Tacos"],
+            dietaryOptions: {
+                glutenFree: true,
+                glutenFreeDetails: "Corn tortilla tacos are gluten-free, staff very knowledgeable",
+                vegan: true,
+                vegetarian: true
+            },
+            features: ["outdoor patio", "full bar", "happy hour", "agave-focused cocktails"],
+            hours: {
+                today: "4pm-10pm",
+                open: true,
+                happyHour: "4-6pm weekdays"
+            },
+            tucsonFoodie: {
+                hasVoucher: true,
+                voucherAmount: "$20 off",
+                voucherFrequency: "every 6 months",
+                latestArticle: "Penca's Innovative Taco Menu"
+            },
+            currentDeals: ["$2 off tacos on Tuesday", "Happy hour 4-6pm"],
+            whyRecommended: "Inventive taco combinations with vegetarian/vegan options, excellent mezcal selection",
+            phone: "(520) 203-7681",
+            website: "pencatucson.com",
+            parkingInfo: "Street parking and nearby garages",
+            reservations: "Recommended"
+        },
+        {
+            name: "Calle Tepa",
+            address: "6151 E Broadway Blvd, Tucson, AZ 85711",
+            neighborhood: "East Side",
+            priceRange: "$",
+            cuisine: "Mexican",
+            matchScore: 92,
+            rating: 4.4,
+            reviewSummary: "Family-owned restaurant specializing in street tacos and traditional Mexican fare",
+            atmosphere: "Casual",
+            specialties: ["Street Tacos", "Al Pastor", "Carne Asada Tacos"],
+            dietaryOptions: {
+                glutenFree: true,
+                glutenFreeDetails: "Corn tortillas standard for tacos",
+                vegan: false,
+                vegetarian: true
+            },
+            features: ["outdoor seating", "full bar", "family friendly", "quick service"],
+            hours: {
+                today: "11am-10pm",
+                open: true,
+                happyHour: "2-5pm daily"
+            },
+            tucsonFoodie: {
+                hasVoucher: true,
+                voucherAmount: "$10 off",
+                voucherFrequency: "every 90 days",
+                latestArticle: "Calle Tepa's Authentic Street Tacos"
+            },
+            currentDeals: ["Taco specials during happy hour", "$1 off margaritas 2-5pm"],
+            whyRecommended: "Authentic street-style tacos with generous portions and fresh ingredients",
+            phone: "(520) 305-4600",
+            website: "calletepa.com",
+            parkingInfo: "Free parking lot",
+            reservations: "Not needed"
+        },
+        {
+            name: "Mojo Cuban Kitchen",
+            address: "7167 E Tanque Verde Rd, Tucson, AZ 85715",
+            neighborhood: "East Side",
+            priceRange: "$",
+            cuisine: "Cuban",
+            matchScore: 88,
+            rating: 4.5,
+            reviewSummary: "Cuban cuisine with unique fusion tacos combining Cuban and Mexican flavors",
+            atmosphere: "Vibrant Casual",
+            specialties: ["Cuban Pork Tacos", "Mojo Chicken Tacos", "Plantain Tacos"],
+            dietaryOptions: {
+                glutenFree: true,
+                glutenFreeDetails: "Corn tortillas available for all tacos",
+                vegan: false,
+                vegetarian: true
+            },
+            features: ["outdoor patio", "full bar", "live music Friday nights", "colorful decor"],
+            hours: {
+                today: "11am-9pm",
+                open: true,
+                happyHour: "3-6pm weekdays"
+            },
+            tucsonFoodie: {
+                hasVoucher: true,
+                voucherAmount: "$20 off",
+                voucherFrequency: "every 6 months",
+                latestArticle: "Mojo's Cuban-Mexican Fusion Success"
+            },
+            currentDeals: ["Happy hour mojitos", "Tuesday taco specials"],
+            whyRecommended: "Unique Cuban-style tacos you won't find elsewhere, excellent mojitos",
+            phone: "(520) 298-3188",
+            website: "mojocubankitchentucson.com",
+            parkingInfo: "Free parking lot",
+            reservations: "Recommended for groups"
+        },
+        {
+            name: "El Charro Café Ventana",
+            address: "6910 E Sunrise Dr, Tucson, AZ 85750",
+            neighborhood: "Foothills",
+            priceRange: "$",
+            cuisine: "Mexican",
+            matchScore: 86,
+            rating: 4.4,
+            reviewSummary: "Foothills location of the historic El Charro with scenic mountain views",
+            atmosphere: "Upscale Casual",
+            specialties: ["Carne Seca Tacos", "Fish Tacos", "Tableside Guacamole"],
+            dietaryOptions: {
+                glutenFree: true,
+                glutenFreeDetails: "Dedicated gluten-free menu available",
+                vegan: false,
+                vegetarian: true
+            },
+            features: ["mountain views", "full bar", "patio dining", "private dining room"],
+            hours: {
+                today: "11am-9pm",
+                open: true,
+                happyHour: "3-6pm daily"
+            },
+            tucsonFoodie: {
+                hasVoucher: true,
+                voucherAmount: "$20 off",
+                voucherFrequency: "every 6 months",
+                latestArticle: "El Charro Ventana's Stunning Views"
+            },
+            currentDeals: ["Margarita Monday specials", "Happy hour appetizers"],
+            whyRecommended: "Same great El Charro tacos with beautiful Catalina Mountain views",
+            phone: "(520) 514-1922",
+            website: "elcharrocafe.com",
+            parkingInfo: "Free parking lot with valet available",
+            reservations: "Recommended"
+        }
+    ],
+    searchSummary: "Found 5 top-rated taco restaurants from Tucson Foodie partners, featuring authentic Mexican, innovative Latin, and unique fusion options. All offer Tucson Foodie member vouchers.",
+    tips: ["Tuesday is the best day for taco deals at most locations", "El Charro's carne seca tacos are a Tucson original - must try!", "Penca offers creative vegetarian and vegan taco options", "All listed restaurants accept Tucson Foodie member vouchers"],
+    preloaded: true
 };
 
 // Example queries
@@ -86,11 +286,13 @@ document.addEventListener('DOMContentLoaded', () => {
         state.searchHistory = JSON.parse(savedHistory);
     }
 
-    // Check for preloaded query
+    // Load preloaded results
+    state.results = PRELOADED_RESULTS;
+    renderResults();
+
+    // Set the initial query in the search input
     const searchInput = document.getElementById('searchInput');
-    if (searchInput.value) {
-        searchRestaurants();
-    }
+    searchInput.value = "What are some of the best taco restaurants in town?";
 });
 
 // Save API Key
@@ -271,10 +473,32 @@ Return ONLY a valid JSON object with this exact structure:
 }`;
 }
 
-// Search restaurants
-async function searchRestaurants() {
+// Search restaurants with debouncing
+function searchRestaurants() {
+    // Clear existing timer
+    if (state.searchDebounceTimer) {
+        clearTimeout(state.searchDebounceTimer);
+    }
+    
+    // Set new timer for debounced search
+    state.searchDebounceTimer = setTimeout(() => {
+        performSearch();
+    }, 300); // 300ms debounce
+}
+
+// Perform the actual search
+async function performSearch() {
     const query = document.getElementById('searchInput').value.trim();
     if (!query) return;
+    
+    // Check cache first
+    const cacheKey = query.toLowerCase();
+    if (state.searchCache.has(cacheKey)) {
+        const cachedResults = state.searchCache.get(cacheKey);
+        state.results = cachedResults;
+        renderResults();
+        return;
+    }
     
     // Check API key
     if (!state.apiKey) {
@@ -352,6 +576,13 @@ async function searchRestaurants() {
         });
         
         state.results = results;
+        
+        // Cache the results (limit cache size to 20 queries)
+        if (state.searchCache.size >= 20) {
+            const firstKey = state.searchCache.keys().next().value;
+            state.searchCache.delete(firstKey);
+        }
+        state.searchCache.set(cacheKey, results);
         
         // Add to search history
         if (!state.searchHistory.includes(query)) {
