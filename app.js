@@ -210,7 +210,7 @@ const PRELOADED_RESULTS = {
                 latestArticle: "El Charro Ventana's Stunning Views"
             },
             currentDeals: ["Margarita Monday specials", "Happy hour appetizers"],
-            whyRecommended: "Picture this: You're savoring world-famous carne seca tacos while gazing at the majestic Catalina Mountains bathed in golden sunset light. Their fish tacos are equally spectacular - fresh, zesty, and perfectly seasoned!"
+            whyRecommended: "Picture this: You're savoring world-famous carne seca tacos while gazing at the majestic Catalina Mountains bathed in golden sunset light. Their fish tacos are equally spectacular - fresh, zesty, and perfectly seasoned!",
             phone: "(520) 514-1922",
             website: "elcharrocafe.com",
             parkingInfo: "Free parking lot with valet available",

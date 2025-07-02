@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Tucson Foodie</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .debug-section {
+            background: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+        pre {
+            background: #f0f0f0;
+            padding: 10px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tucson Foodie Debug Page</h1>
+    
+    <div class="debug-section">
+        <h2>1. Basic HTML Test</h2>
+        <p class="success">✓ If you can see this, basic HTML is working</p>
+    </div>
+    
+    <div class="debug-section">
+        <h2>2. JavaScript Test</h2>
+        <p id="js-test">JavaScript not loaded...</p>
+    </div>
+    
+    <div class="debug-section">
+        <h2>3. External Scripts Test</h2>
+        <p id="lucide-test">Lucide icons not loaded...</p>
+        <p id="data-test">Restaurant data not loaded...</p>
+        <p id="app-test">App.js not loaded...</p>
+    </div>
+    
+    <div class="debug-section">
+        <h2>4. Console Errors</h2>
+        <pre id="console-errors">Checking for errors...</pre>
+    </div>
+    
+    <div class="debug-section">
+        <h2>5. Search Functionality Test</h2>
+        <input type="text" id="test-search" placeholder="Test search input" style="padding: 10px; width: 300px;">
+        <button onclick="testSearch()" style="padding: 10px;">Test Search</button>
+        <p id="search-result"></p>
+    </div>
+
+    <script>
+        // Test basic JavaScript
+        document.getElementById('js-test').innerHTML = '<span class="success">✓ JavaScript is working</span>';
+        
+        // Capture console errors
+        let errors = [];
+        window.onerror = function(msg, url, line, col, error) {
+            errors.push(`${msg} at ${url}:${line}:${col}`);
+            document.getElementById('console-errors').textContent = errors.join('\n');
+            return false;
+        };
+        
+        // Test search function
+        function testSearch() {
+            const value = document.getElementById('test-search').value;
+            document.getElementById('search-result').innerHTML = `Search value: "${value}"`;
+        }
+    </script>
+    
+    <!-- Load Lucide -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script>
+        // Test Lucide
+        if (typeof lucide !== 'undefined') {
+            document.getElementById('lucide-test').innerHTML = '<span class="success">✓ Lucide icons loaded</span>';
+        }
+    </script>
+    
+    <!-- Load restaurant data -->
+    <script src="restaurants-data.js?v=3"></script>
+    <script>
+        // Test restaurant data
+        if (typeof TUCSON_FOODIE_RESTAURANTS !== 'undefined') {
+            const count = Object.keys(TUCSON_FOODIE_RESTAURANTS).length;
+            document.getElementById('data-test').innerHTML = `<span class="success">✓ Restaurant data loaded (${count} restaurants)</span>`;
+        }
+    </script>
+    
+    <!-- Load app.js -->
+    <script src="app.js?v=3"></script>
+    <script>
+        // Test app.js
+        if (typeof searchRestaurants !== 'undefined') {
+            document.getElementById('app-test').innerHTML = '<span class="success">✓ App.js loaded</span>';
+        }
+        
+        // Show any captured errors
+        setTimeout(() => {
+            if (errors.length === 0) {
+                document.getElementById('console-errors').innerHTML = '<span class="success">No JavaScript errors detected</span>';
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

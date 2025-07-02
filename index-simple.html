@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tucson Foodie - AI Restaurant Discovery Assistant</title>
+    <link rel="stylesheet" href="styles.css?v=3">
+    <style>
+        /* Emergency inline styles to ensure visibility */
+        .results-section {
+            display: block !important;
+            padding: 20px;
+        }
+        #listView {
+            display: block !important;
+        }
+        .hidden {
+            display: none;
+        }
+        .restaurant-card {
+            background: white;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <h1>🍴 Tucson Foodie</h1>
+            <p>Your AI-powered restaurant discovery assistant</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Search Section -->
+            <section class="search-section">
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Ask me anything about Tucson restaurants..." value="Which Mexican restaurants have the best tacos?">
+                    <button id="searchButton" onclick="searchRestaurants()">
+                        Search
+                    </button>
+                </div>
+            </section>
+
+            <!-- Example Cards -->
+            <section class="examples-section">
+                <h3>Try asking me:</h3>
+                <div class="example-cards">
+                    <button class="example-card" onclick="setQuery('Which Mexican restaurants have the best tacos?')">
+                        🔍 Which Mexican restaurants have the best tacos?
+                    </button>
+                    <button class="example-card" onclick="setQuery('What are some romantic dinner spots with outdoor seating?')">
+                        ❤️ What are some romantic dinner spots with outdoor seating?
+                    </button>
+                    <button class="example-card" onclick="setQuery('Find me a place for Sunday brunch near downtown')">
+                        ☕ Find me a place for Sunday brunch near downtown
+                    </button>
+                    <button class="example-card" onclick="setQuery('Where can I find the best pizza in Tucson?')">
+                        🍕 Where can I find the best pizza in Tucson?
+                    </button>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section id="resultsSection" class="results-section">
+                <h2>Search Results</h2>
+                <div id="searchSummary" class="search-summary">
+                    <div class="summary-content"></div>
+                </div>
+                <div id="results" class="results">
+                    <div id="listView" class="list-view">
+                        <!-- Results will appear here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- All Restaurants Section -->
+            <section class="all-restaurants-section">
+                <h2>Browse All Restaurants</h2>
+                <div id="allRestaurants" class="restaurant-grid">
+                    <!-- Restaurant cards will appear here -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="restaurants-data.js?v=3"></script>
+    <script src="app.js?v=3"></script>
+    <script>
+        // Additional initialization to ensure it works
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('Page loaded, initializing...');
+            
+            // Ensure search input has the value
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.value = 'Which Mexican restaurants have the best tacos?';
+            }
+            
+            // Display preloaded results
+            if (typeof PRELOADED_RESULTS !== 'undefined') {
+                state.results = PRELOADED_RESULTS;
+                renderResults();
+            }
+        });
+    </script>
+</body>
+</html>
