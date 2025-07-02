@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tucson Foodie - AI Restaurant Discovery Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- Demo Alert Modal -->
+        <div id="demoAlert" class="modal hidden">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <i data-lucide="lock" class="modal-icon"></i>
+                    <div>
+                        <h3>Available in Production Build</h3>
+                        <p id="demoAlertMessage"></p>
+                    </div>
+                </div>
+                <button onclick="closeDemoAlert()" class="modal-close-btn">Got it</button>
+            </div>
+        </div>
+
+        <!-- API Key Setup Modal -->
+        <div id="apiKeyModal" class="modal">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content api-key-modal">
+                <div class="modal-header">
+                    <i data-lucide="key" class="modal-icon"></i>
+                    <div>
+                        <h3>Enter Gemini API Key</h3>
+                        <p>To use this demo, you'll need a Google Gemini API key. <a href="https://makersuite.google.com/app/apikey" target="_blank" rel="noopener">Get one here</a></p>
+                    </div>
+                </div>
+                <input type="password" id="apiKeyInput" placeholder="Enter your Gemini API key..." class="api-key-input">
+                <button onclick="saveApiKey()" class="modal-close-btn">Save & Continue</button>
+                <p class="api-key-note">Your API key is stored locally in your browser and never sent to any server.</p>
+            </div>
+        </div>
+
+        <!-- Header -->
+        <header class="header">
+            <div class="header-badge">
+                <i data-lucide="zap"></i>
+                LIVE DEMO
+                <i data-lucide="zap"></i>
+            </div>
+            <div class="header-brand">TUCSON FOODIE</div>
+            <h1>AI Restaurant Discovery Assistant</h1>
+            <p class="header-subtitle">Ask me anything about Tucson restaurants - I'll find the perfect spot for you!</p>
+            <div class="header-warning">
+                <i data-lucide="alert-circle"></i>
+                <div>
+                    <strong>Demo Version - Limited Features</strong>
+                    <p>This demo uses simulated data from Tucson Foodie partner restaurants only. A production build would include real-time internet search, all Tucson restaurants, accurate hours/ratings.</p>
+                    <p style="margin-top: 0.25rem; font-size: 0.7rem;">Using a heavily throttled demo API key. For better performance, <a href="#" onclick="showApiKeyModal(); return false;">use your own key</a>.</p>
+                </div>
+            </div>
+            <div class="header-info">
+                <span><i data-lucide="clock"></i> <span id="currentTime"></span></span>
+                <span><i data-lucide="map-pin"></i> Tucson, AZ</span>
+            </div>
+        </header>
+
+        <!-- Search Section -->
+        <section class="search-section">
+            <div class="search-note">
+                <i data-lucide="timer"></i>
+                Demo runs on Gemini 2.0 Flash - Responses typically in 2-3 seconds
+            </div>
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Ask me anything about Tucson restaurants..." value="What are some of the best taco restaurants in town?">
+                <button id="searchButton" onclick="searchRestaurants()">
+                    <i data-lucide="search"></i>
+                </button>
+                <div id="searchHistory" class="search-history hidden"></div>
+            </div>
+        </section>
+
+        <!-- Example Queries -->
+        <section id="exampleQueries" class="example-queries">
+            <p>Try these example searches:</p>
+            <div class="example-grid"></div>
+        </section>
+
+        <!-- View Controls -->
+        <section id="viewControls" class="view-controls hidden">
+            <div class="view-mode-toggle">
+                <button class="view-btn active" onclick="setViewMode('list')">
+                    <i data-lucide="list"></i> List
+                </button>
+                <button class="view-btn" onclick="setViewMode('map')">
+                    <i data-lucide="globe"></i> Map
+                </button>
+            </div>
+            <button class="filter-btn" onclick="toggleFilters()">
+                <i data-lucide="filter"></i> Filters & Sort
+                <i data-lucide="chevron-down" id="filterChevron"></i>
+            </button>
+            <button class="share-btn" onclick="shareResults()">
+                <i data-lucide="share-2"></i> Share
+            </button>
+        </section>
+
+        <!-- Filters -->
+        <section id="filters" class="filters hidden">
+            <p class="filter-note">Select features to show only restaurants that have them</p>
+            <div class="filter-grid">
+                <div>
+                    <label>Sort by:</label>
+                    <select id="sortBy" onchange="applyFilters()">
+                        <option value="matchScore">Best Match</option>
+                        <option value="price">Price (Low to High)</option>
+                        <option value="rating">Rating</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Price range:</label>
+                    <select id="filterPrice" onchange="applyFilters()">
+                        <option value="all">All Prices</option>
+                        <option value="1">$ (Budget)</option>
+                        <option value="2">$$ (Moderate)</option>
+                        <option value="3">$$$ (Upscale)</option>
+                        <option value="4">$$$$ (Fine Dining)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="feature-filters">
+                <label>Features:</label>
+                <div class="feature-buttons"></div>
+            </div>
+        </section>
+
+        <!-- Search Summary -->
+        <section id="searchSummary" class="search-summary hidden">
+            <div class="summary-content"></div>
+        </section>
+
+        <!-- Results -->
+        <section id="results" class="results hidden">
+            <div id="listView" class="list-view"></div>
+            <div id="mapView" class="map-view hidden">
+                <i data-lucide="globe"></i>
+                <h3>Interactive Map View</h3>
+                <p>Available in a production build with GPS location and real-time directions</p>
+                <button onclick="setViewMode('list')">Switch to List View</button>
+            </div>
+        </section>
+
+        <!-- Favorites -->
+        <section id="favorites" class="favorites hidden">
+            <h2><i data-lucide="heart"></i> Your Favorite Restaurants</h2>
+            <div class="favorites-grid"></div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features-section">
+            <h3><i data-lucide="sparkles"></i> Possible Features for Production Build</h3>
+            <div class="features-grid">
+                <div class="feature-column">
+                    <div class="feature-item">
+                        <i data-lucide="globe"></i>
+                        <div>
+                            <strong>Real-Time Internet Search</strong>
+                            <p>Live data from Google, Yelp, and other sources in under 5 seconds</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i data-lucide="map-pin"></i>
+                        <div>
+                            <strong>GPS Location & Distance Search</strong>
+                            <p>Find restaurants "within 2 miles" or "5 minutes away"</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i data-lucide="globe"></i>
+                        <div>
+                            <strong>Interactive Maps</strong>
+                            <p>Visual restaurant locations with real-time directions</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i data-lucide="database"></i>
+                        <div>
+                            <strong>Complete Tucson Foodie Archive</strong>
+                            <p>Search all articles and reviews ever published</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-column">
+                    <div class="feature-item">
+                        <i data-lucide="share-2"></i>
+                        <div>
+                            <strong>Social Sharing</strong>
+                            <p>Share discoveries via text, email, or social media</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i data-lucide="user"></i>
+                        <div>
+                            <strong>Personalized Recommendations</strong>
+                            <p>AI learns your taste preferences over time</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i data-lucide="tag"></i>
+                        <div>
+                            <strong>Smart Voucher Tracking</strong>
+                            <p>Track used vouchers and reset dates</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i data-lucide="calendar"></i>
+                        <div>
+                            <strong>Direct Reservations</strong>
+                            <p>Book tables through OpenTable integration</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <i data-lucide="shield"></i>
+                        <div>
+                            <strong>Member-Only Features</strong>
+                            <p>Exclusive deals and early access to new restaurants</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>AI-powered restaurant discovery with real-time search</p>
+            <p>Prepared for <a href="https://tucsonfoodie.com" target="_blank" rel="noopener">Tucson Foodie</a></p>
+            <p class="footer-credits">
+                Powered by <a href="https://www.skyislandai.com/" target="_blank" rel="noopener">Sky Island AI</a> • Demo Version 1.0
+            </p>
+        </footer>
+    </div>
+
+    <script src="restaurants-data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
