@@ -244,8 +244,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Remove API key modal completely
     const apiKeyModal = document.getElementById('apiKeyModal');
     if (apiKeyModal) {
-        apiKeyModal.style.display = 'none';
-        apiKeyModal.classList.add('hidden');
         apiKeyModal.remove();
     }
 
@@ -607,7 +605,7 @@ async function performSearch() {
     state.loading = true;
     const searchButton = document.getElementById('searchButton');
     searchButton.disabled = true;
-    searchButton.innerHTML = '<i data-lucide="loader" class="loading"></i>';
+    searchButton.innerHTML = '<i data-lucide="loader" class="loading"></i><span>Searching...</span>';
     lucide.createIcons();
     
     // Hide example queries
@@ -705,7 +703,7 @@ async function performSearch() {
     } finally {
         state.loading = false;
         searchButton.disabled = false;
-        searchButton.innerHTML = '<i data-lucide="search"></i>';
+        searchButton.innerHTML = '<i data-lucide="search"></i><span>Search</span>';
         lucide.createIcons();
     }
 }
