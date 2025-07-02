@@ -8,67 +8,66 @@
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 </head>
 <body>
-    <div id="app" class="app-container">
-        <!-- Demo Alert Modal -->
-        <div id="demoAlert" class="modal hidden">
-            <div class="modal-backdrop"></div>
-            <div class="modal-content">
-                <div class="modal-header">
-                    <i data-lucide="lock" class="modal-icon"></i>
-                    <div>
-                        <h3>Available in Production Build</h3>
-                        <p id="demoAlertMessage"></p>
-                    </div>
-                </div>
-                <button onclick="closeDemoAlert()" class="modal-close-btn">Got it</button>
+    <!-- API Key Modal -->
+    <div id="apiKeyModal" class="api-modal" style="display: none;">
+        <div class="api-modal-content">
+            <div class="api-modal-header">
+                <i data-lucide="key"></i>
+                <h2>API Key Required</h2>
+            </div>
+            <p>Please enter your Gemini API key to enable AI search functionality:</p>
+            <div class="api-form">
+                <input type="password" id="apiKeyInput" placeholder="Enter your Gemini API key...">
+                <button onclick="submitApiKey()">
+                    <i data-lucide="check"></i>
+                    Save Key
+                </button>
+            </div>
+            <div class="api-help">
+                <p><small>Your API key is stored locally and never sent to any server except Google's Gemini API.</small></p>
+                <p><small>Get your free API key at <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a></small></p>
             </div>
         </div>
+    </div>
 
-        <!-- API Key Setup Modal -->
-        <div id="apiKeyModal" class="modal hidden">
-            <div class="modal-backdrop"></div>
-            <div class="modal-content api-key-modal">
-                <div class="modal-header">
-                    <i data-lucide="key" class="modal-icon"></i>
-                    <div>
-                        <h3>Enter Gemini API Key</h3>
-                        <p>To use this demo, you'll need a Google Gemini API key. <a href="https://makersuite.google.com/app/apikey" target="_blank" rel="noopener">Get one here</a></p>
-                    </div>
-                </div>
-                <input type="password" id="apiKeyInput" placeholder="Enter your Gemini API key..." class="api-key-input">
-                <button onclick="saveApiKey()" class="modal-close-btn">Save & Continue</button>
-                <p class="api-key-note">Your API key is stored locally in your browser and never sent to any server.</p>
-            </div>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <h1><i data-lucide="utensils"></i> Tucson Foodie</h1>
+            <p>Your AI-powered restaurant discovery assistant</p>
         </div>
+    </header>
 
-        <!-- Header -->
-        <header class="header">
-            <div class="header-badge">
-                <i data-lucide="zap"></i>
-                LIVE DEMO
-                <i data-lucide="zap"></i>
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+        <!-- Quick Examples -->
+        <section class="examples-section">
+            <h3>Try asking me:</h3>
+            <div class="example-cards">
+                <button class="example-card" onclick="setQuery('Which Mexican restaurants have the best tacos?')">
+                    <i data-lucide="search"></i>
+                    <span>Which Mexican restaurants have the best tacos?</span>
+                </button>
+                <button class="example-card" onclick="setQuery('What are some romantic dinner spots with outdoor seating?')">
+                    <i data-lucide="heart"></i>
+                    <span>What are some romantic dinner spots with outdoor seating?</span>
+                </button>
+                <button class="example-card" onclick="setQuery('Find me a place for Sunday brunch near downtown')">
+                    <i data-lucide="coffee"></i>
+                    <span>Find me a place for Sunday brunch near downtown</span>
+                </button>
+                <button class="example-card" onclick="setQuery('Where can I find the best pizza in Tucson?')">
+                    <i data-lucide="pizza"></i>
+                    <span>Where can I find the best pizza in Tucson?</span>
+                </button>
             </div>
-            <div class="header-brand">TUCSON FOODIE</div>
-            <h1>AI Restaurant Discovery Assistant</h1>
-            <p class="header-subtitle">Ask me anything about Tucson restaurants - I'll find the perfect spot for you!</p>
-            <div class="header-warning">
-                <i data-lucide="alert-circle"></i>
-                <div>
-                    <strong>Demo Version - Powered by Gemini 2.5 Flash</strong>
-                    <p>This demo uses simulated data from Tucson Foodie partner restaurants only. A production build would include real-time internet search, all Tucson restaurants, accurate hours/ratings.</p>
-                    <p style="margin-top: 0.25rem; font-size: 0.7rem;">Using a heavily throttled demo API key. Responses may take 8-12 seconds.</p>
-                </div>
-            </div>
-            <div class="header-info">
-                <span><i data-lucide="clock"></i> <span id="currentTime"></span></span>
-                <span><i data-lucide="map-pin"></i> Tucson, AZ</span>
-            </div>
-        </header>
+        </section>
 
         <!-- Search Section -->
         <section class="search-section">
             <div class="search-container">
-                <input type="text" id="searchInput" placeholder="Ask me anything about Tucson restaurants..." value="What are some of the best taco restaurants in town?">
+                <input type="text" id="searchInput" placeholder="Ask me anything about Tucson restaurants...">
                 <button id="searchButton" onclick="searchRestaurants()">
                     <i data-lucide="search"></i>
                     <span>Search</span>
@@ -77,165 +76,148 @@
             </div>
         </section>
 
-        <!-- Example Queries -->
-        <section id="exampleQueries" class="example-queries">
-            <p>Try these example searches:</p>
-            <div class="example-grid"></div>
-        </section>
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-container" style="display: none;">
+            <i data-lucide="loader-2" class="loading"></i>
+            <p>Finding the perfect restaurants for you...</p>
+        </div>
 
-        <!-- View Controls -->
-        <section id="viewControls" class="view-controls hidden">
-            <div class="view-mode-toggle">
-                <button class="view-btn active" onclick="setViewMode('list')">
-                    <i data-lucide="list"></i> List
-                </button>
-                <button class="view-btn" onclick="setViewMode('map')">
-                    <i data-lucide="globe"></i> Map
+        <!-- Results Section -->
+        <section id="resultsSection" class="results-section">
+            <!-- View Controls -->
+            <div id="viewControls" class="view-controls hidden">
+                <div class="view-buttons">
+                    <button class="view-btn active" onclick="setViewMode('list')">
+                        <i data-lucide="list"></i>
+                        List View
+                    </button>
+                    <button class="view-btn" onclick="setViewMode('map')">
+                        <i data-lucide="map"></i>
+                        Map View
+                    </button>
+                </div>
+                <button class="filter-toggle" onclick="toggleFilters()">
+                    <i data-lucide="sliders"></i>
+                    Filters
+                    <i data-lucide="chevron-down" id="filterChevron"></i>
                 </button>
             </div>
-            <button class="filter-btn" onclick="toggleFilters()">
-                <i data-lucide="filter"></i> Filters & Sort
-                <i data-lucide="chevron-down" id="filterChevron"></i>
-            </button>
-            <button class="share-btn" onclick="shareResults()">
-                <i data-lucide="share-2"></i> Share
-            </button>
-        </section>
-
-        <!-- Filters -->
-        <section id="filters" class="filters hidden">
-            <p class="filter-note">Select features to show only restaurants that have them</p>
-            <div class="filter-grid">
-                <div>
-                    <label>Sort by:</label>
+            
+            <!-- Search Summary -->
+            <div id="searchSummary" class="search-summary hidden">
+                <div class="summary-content"></div>
+            </div>
+            
+            <!-- Filters -->
+            <div id="filters" class="filters hidden">
+                <div class="filter-row">
                     <select id="sortBy" onchange="applyFilters()">
-                        <option value="matchScore">Best Match</option>
-                        <option value="price">Price (Low to High)</option>
-                        <option value="rating">Rating</option>
+                        <option value="matchScore">Sort by Relevance</option>
+                        <option value="rating">Sort by Rating</option>
+                        <option value="price">Sort by Price</option>
                     </select>
-                </div>
-                <div>
-                    <label>Price range:</label>
                     <select id="filterPrice" onchange="applyFilters()">
                         <option value="all">All Prices</option>
-                        <option value="1">$ (Budget)</option>
-                        <option value="2">$$ (Moderate)</option>
-                        <option value="3">$$$ (Upscale)</option>
-                        <option value="4">$$$$ (Fine Dining)</option>
+                        <option value="1">$ - Budget</option>
+                        <option value="2">$$ - Moderate</option>
+                        <option value="3">$$$ - Upscale</option>
+                        <option value="4">$$$$ - Fine Dining</option>
+                    </select>
+                </div>
+                <div class="feature-buttons">
+                    <!-- Feature filter buttons will be inserted here -->
+                </div>
+            </div>
+            
+            <!-- Results Container -->
+            <div id="results" class="results hidden">
+                <!-- List View -->
+                <div id="listView" class="list-view">
+                    <!-- Restaurant cards will be dynamically inserted here -->
+                </div>
+                
+                <!-- Map View -->
+                <div id="mapView" class="map-view hidden">
+                    <p>Map view coming soon!</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Example Queries -->
+        <div id="exampleQueries" class="example-queries">
+            <div class="example-grid">
+                <!-- Example query buttons will be inserted here -->
+            </div>
+        </div>
+        
+        <!-- Favorites Section -->
+        <section id="favorites" class="favorites-section hidden">
+            <h2>Your Favorite Restaurants</h2>
+            <div class="favorites-grid">
+                <!-- Favorite cards will be dynamically inserted here -->
+            </div>
+        </section>
+        
+        <!-- Demo Alert -->
+        <div id="demoAlert" class="demo-alert hidden">
+            <div class="demo-alert-content">
+                <p id="demoAlertMessage"></p>
+                <button onclick="closeDemoAlert()">OK</button>
+            </div>
+        </div>
+        
+        <!-- Current Time Display -->
+        <div class="time-display">
+            <i data-lucide="clock"></i>
+            <span id="currentTime"></span>
+        </div>
+
+        <!-- All Restaurants Section -->
+        <section class="all-restaurants-section">
+            <div class="section-header">
+                <h2>Browse All Restaurants</h2>
+                <div class="filter-controls">
+                    <select id="filterCategory" onchange="filterRestaurants()">
+                        <option value="">All Categories</option>
+                        <option value="Mexican">Mexican</option>
+                        <option value="Italian">Italian</option>
+                        <option value="American">American</option>
+                        <option value="Asian">Asian</option>
+                        <option value="Mediterranean">Mediterranean</option>
+                        <option value="Steakhouse">Steakhouse</option>
+                        <option value="Breakfast">Breakfast</option>
+                        <option value="Seafood">Seafood</option>
+                        <option value="Pizza">Pizza</option>
+                        <option value="Healthy">Healthy</option>
+                    </select>
+                    <select id="filterPrice" onchange="filterRestaurants()">
+                        <option value="">All Prices</option>
+                        <option value="$">$ - Budget</option>
+                        <option value="$$">$$ - Moderate</option>
+                        <option value="$$$">$$$ - Upscale</option>
+                        <option value="$$$$">$$$$ - Fine Dining</option>
+                    </select>
+                    <select id="sortBy" onchange="sortRestaurants()">
+                        <option value="name">Sort by Name</option>
+                        <option value="rating">Sort by Rating</option>
+                        <option value="price">Sort by Price</option>
                     </select>
                 </div>
             </div>
-            <div class="feature-filters">
-                <label>Features:</label>
-                <div class="feature-buttons"></div>
+            <div id="allRestaurants" class="restaurant-grid">
+                <!-- Restaurant cards will be dynamically inserted here -->
             </div>
         </section>
+        </div>
+    </main>
 
-        <!-- Search Summary -->
-        <section id="searchSummary" class="search-summary hidden">
-            <div class="summary-content"></div>
-        </section>
-
-        <!-- Results -->
-        <section id="results" class="results hidden">
-            <div id="listView" class="list-view"></div>
-            <div id="mapView" class="map-view hidden">
-                <i data-lucide="globe"></i>
-                <h3>Interactive Map View</h3>
-                <p>Available in a production build with GPS location and real-time directions</p>
-                <button onclick="setViewMode('list')">Switch to List View</button>
-            </div>
-        </section>
-
-        <!-- Favorites -->
-        <section id="favorites" class="favorites hidden">
-            <h2><i data-lucide="heart"></i> Your Favorite Restaurants</h2>
-            <div class="favorites-grid"></div>
-        </section>
-
-        <!-- Features Section -->
-        <section class="features-section">
-            <h3><i data-lucide="sparkles"></i> Possible Features for Production Build</h3>
-            <div class="features-grid">
-                <div class="feature-column">
-                    <div class="feature-item">
-                        <i data-lucide="globe"></i>
-                        <div>
-                            <strong>Real-Time Internet Search</strong>
-                            <p>Live data from Google, Yelp, and other sources in under 5 seconds</p>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <i data-lucide="map-pin"></i>
-                        <div>
-                            <strong>GPS Location & Distance Search</strong>
-                            <p>Find restaurants "within 2 miles" or "5 minutes away"</p>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <i data-lucide="globe"></i>
-                        <div>
-                            <strong>Interactive Maps</strong>
-                            <p>Visual restaurant locations with real-time directions</p>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <i data-lucide="database"></i>
-                        <div>
-                            <strong>Complete Tucson Foodie Archive</strong>
-                            <p>Search all articles and reviews ever published</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="feature-column">
-                    <div class="feature-item">
-                        <i data-lucide="share-2"></i>
-                        <div>
-                            <strong>Social Sharing</strong>
-                            <p>Share discoveries via text, email, or social media</p>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <i data-lucide="user"></i>
-                        <div>
-                            <strong>Personalized Recommendations</strong>
-                            <p>AI learns your taste preferences over time</p>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <i data-lucide="tag"></i>
-                        <div>
-                            <strong>Smart Voucher Tracking</strong>
-                            <p>Track used vouchers and reset dates</p>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <i data-lucide="calendar"></i>
-                        <div>
-                            <strong>Direct Reservations</strong>
-                            <p>Book tables through OpenTable integration</p>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <i data-lucide="shield"></i>
-                        <div>
-                            <strong>Member-Only Features</strong>
-                            <p>Exclusive deals and early access to new restaurants</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer class="footer">
-            <p>AI-powered restaurant discovery with real-time search</p>
-            <p>Prepared for <a href="https://tucsonfoodie.com" target="_blank" rel="noopener">Tucson Foodie</a></p>
-            <p class="footer-credits">
-                Powered by <a href="https://www.skyislandai.com/" target="_blank" rel="noopener">Sky Island AI</a> • Demo Version 1.0
-            </p>
-        </footer>
-    </div>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 Tucson Foodie - Your AI Restaurant Discovery Assistant</p>
+            <p>Made with <i data-lucide="heart" style="width: 16px; height: 16px;"></i> in Tucson</p>
+        </div>
+    </footer>
 
     <script src="restaurants-data.js"></script>
     <script src="app.js"></script>

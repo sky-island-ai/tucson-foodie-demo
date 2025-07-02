@@ -287,19 +287,13 @@ document.addEventListener('DOMContentLoaded', () => {
         state.searchHistory = JSON.parse(savedHistory);
     }
 
-    // Load preloaded results and update open status
+    // Display all restaurants on page load
+    displayAllRestaurants();
+    
+    // Prepopulate search and results
+    document.getElementById('searchInput').value = 'Which Mexican restaurants have the best tacos?';
     state.results = PRELOADED_RESULTS;
-    // Update open status for all preloaded restaurants
-    state.results.recommendations.forEach(restaurant => {
-        if (restaurant.hours) {
-            restaurant.hours.open = isRestaurantOpen(restaurant.hours);
-        }
-    });
     renderResults();
-
-    // Set the initial query in the search input
-    const searchInput = document.getElementById('searchInput');
-    searchInput.value = "What are some of the best taco restaurants in town?";
 });
 
 // Save API Key - No longer needed, always use DEMO_API_KEY
@@ -1281,3 +1275,43 @@ errorStyle.textContent = `
 }
 `;
 document.head.appendChild(errorStyle);
+
+// Display all restaurants
+function displayAllRestaurants() {
+    const container = document.getElementById('allRestaurants');
+    if (!container) return;
+    
+    const restaurants = Object.values(TUCSON_FOODIE_RESTAURANTS || {});
+    
+    container.innerHTML = restaurants.map(restaurant => `
+        <div class="restaurant-card-small">
+            <h3>${restaurant.name}</h3>
+            <p class="restaurant-meta">
+                ${restaurant.cuisine} • ${restaurant.priceRange} • ${restaurant.neighborhood}
+            </p>
+            <p class="restaurant-address">${restaurant.address}</p>
+            <p class="restaurant-phone">${restaurant.phone}</p>
+            ${restaurant.voucher ? `
+                <p class="voucher-info">
+                    <i data-lucide="tag"></i>
+                    ${restaurant.voucher.amount} ${restaurant.voucher.frequency}
+                </p>
+            ` : ''}
+        </div>
+    `).join('');
+    
+    lucide.createIcons();
+}
+
+// Filter restaurants
+function filterRestaurants() {
+    const category = document.getElementById('filterCategory').value;
+    const price = document.getElementById('filterPrice').value;
+    displayAllRestaurants(); // For now, just redisplay all
+}
+
+// Sort restaurants
+function sortRestaurants() {
+    const sortBy = document.getElementById('sortBy').value;
+    displayAllRestaurants(); // For now, just redisplay all
+}
