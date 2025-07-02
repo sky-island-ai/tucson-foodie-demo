@@ -44,7 +44,7 @@ const PRELOADED_RESULTS = {
             cuisine: "Mexican",
             matchScore: 98,
             rating: 4.5,
-            reviewSummary: "Historic Tucson institution serving authentic Sonoran-style Mexican cuisine since 1922",
+            reviewSummary: "Step into history at this legendary Tucson gem where the aroma of sizzling carne seca fills the air and mariachi music sets your heart dancing!",
             atmosphere: "Traditional Mexican",
             specialties: ["Carne Seca Tacos", "Chimichanga", "Tableside Guacamole"],
             dietaryOptions: {
@@ -66,7 +66,7 @@ const PRELOADED_RESULTS = {
                 latestArticle: "El Charro's Famous Carne Seca Recipe"
             },
             currentDeals: ["Taco Tuesday specials", "Happy hour margaritas 3-6pm"],
-            whyRecommended: "Tucson's oldest Mexican restaurant, invented the chimichanga, legendary carne seca tacos",
+            whyRecommended: "THE place for authentic tacos! Their legendary carne seca tacos are a religious experience - tender, flavorful beef that melts in your mouth, wrapped in warm tortillas and topped with their secret spice blend. Plus, they literally invented the chimichanga!",
             phone: "(520) 622-1922",
             website: "elcharrocafe.com",
             parkingInfo: "Street parking and nearby garage",
@@ -80,7 +80,7 @@ const PRELOADED_RESULTS = {
             cuisine: "Latin American",
             matchScore: 95,
             rating: 4.6,
-            reviewSummary: "Modern Latin cuisine with creative taco offerings and craft mezcal program",
+            reviewSummary: "A hip, vibrant spot where innovative tacos meet artisanal mezcal in a feast for all your senses - prepare to have your taco world rocked!",
             atmosphere: "Upscale Casual",
             specialties: ["Tacos de Hongos", "Duck Carnitas Tacos", "Pescado Tacos"],
             dietaryOptions: {
@@ -102,7 +102,7 @@ const PRELOADED_RESULTS = {
                 latestArticle: "Penca's Innovative Taco Menu"
             },
             currentDeals: ["$2 off tacos on Tuesday", "Happy hour 4-6pm"],
-            whyRecommended: "Inventive taco combinations with vegetarian/vegan options, excellent mezcal selection",
+            whyRecommended: "Taco heaven for adventurous eaters! Their duck carnitas tacos are pure genius, and the mushroom tacos will convert even the most devoted carnivores. The mezcal selection? Mind-blowing!",
             phone: "(520) 203-7681",
             website: "pencatucson.com",
             parkingInfo: "Street parking and nearby garages",
@@ -116,7 +116,7 @@ const PRELOADED_RESULTS = {
             cuisine: "Mexican",
             matchScore: 92,
             rating: 4.4,
-            reviewSummary: "Family-owned restaurant specializing in street tacos and traditional Mexican fare",
+            reviewSummary: "Authentic street taco paradise where every bite transports you straight to the bustling markets of Mexico City!",
             atmosphere: "Casual",
             specialties: ["Street Tacos", "Al Pastor", "Carne Asada Tacos"],
             dietaryOptions: {
@@ -138,7 +138,7 @@ const PRELOADED_RESULTS = {
                 latestArticle: "Calle Tepa's Authentic Street Tacos"
             },
             currentDeals: ["Taco specials during happy hour", "$1 off margaritas 2-5pm"],
-            whyRecommended: "Authentic street-style tacos with generous portions and fresh ingredients",
+            whyRecommended: "Street taco perfection! Their al pastor is the real deal - marinated for hours, carved fresh, topped with grilled pineapple. The tortillas? Made fresh all day. The portions? Generous enough to make you weep with joy!",
             phone: "(520) 305-4600",
             website: "calletepa.com",
             parkingInfo: "Free parking lot",
@@ -152,7 +152,7 @@ const PRELOADED_RESULTS = {
             cuisine: "Cuban",
             matchScore: 88,
             rating: 4.5,
-            reviewSummary: "Cuban cuisine with unique fusion tacos combining Cuban and Mexican flavors",
+            reviewSummary: "Where Havana meets Tucson in a delicious dance of flavors - these fusion tacos will make your taste buds salsa!",
             atmosphere: "Vibrant Casual",
             specialties: ["Cuban Pork Tacos", "Mojo Chicken Tacos", "Plantain Tacos"],
             dietaryOptions: {
@@ -174,7 +174,7 @@ const PRELOADED_RESULTS = {
                 latestArticle: "Mojo's Cuban-Mexican Fusion Success"
             },
             currentDeals: ["Happy hour mojitos", "Tuesday taco specials"],
-            whyRecommended: "Unique Cuban-style tacos you won't find elsewhere, excellent mojitos",
+            whyRecommended: "Mind-blowing Cuban-Mexican fusion tacos! Their mojo pork tacos with crispy plantains are a revelation, and don't even get me started on their mojitos - they're basically vacation in a glass!",
             phone: "(520) 298-3188",
             website: "mojocubankitchentucson.com",
             parkingInfo: "Free parking lot",
@@ -188,7 +188,7 @@ const PRELOADED_RESULTS = {
             cuisine: "Mexican",
             matchScore: 86,
             rating: 4.4,
-            reviewSummary: "Foothills location of the historic El Charro with scenic mountain views",
+            reviewSummary: "Stunning mountain views paired with the same legendary tacos that have been making Tucsonans swoon for generations!",
             atmosphere: "Upscale Casual",
             specialties: ["Carne Seca Tacos", "Fish Tacos", "Tableside Guacamole"],
             dietaryOptions: {
@@ -210,14 +210,14 @@ const PRELOADED_RESULTS = {
                 latestArticle: "El Charro Ventana's Stunning Views"
             },
             currentDeals: ["Margarita Monday specials", "Happy hour appetizers"],
-            whyRecommended: "Same great El Charro tacos with beautiful Catalina Mountain views",
+            whyRecommended: "Picture this: You're savoring world-famous carne seca tacos while gazing at the majestic Catalina Mountains bathed in golden sunset light. Their fish tacos are equally spectacular - fresh, zesty, and perfectly seasoned!"
             phone: "(520) 514-1922",
             website: "elcharrocafe.com",
             parkingInfo: "Free parking lot with valet available",
             reservations: "Recommended"
         }
     ],
-    searchSummary: "Found 5 top-rated taco restaurants from Tucson Foodie partners, featuring authentic Mexican, innovative Latin, and unique fusion options. All offer Tucson Foodie member vouchers.",
+    searchSummary: "¡Taco lovers rejoice! We've found 5 absolutely incredible taco destinations that will blow your mind. From El Charro's legendary carne seca (a Tucson original!) to Penca's avant-garde duck carnitas, these spots are serving up taco magic. Best part? They ALL offer exclusive Tucson Foodie member vouchers!",
     tips: ["Tuesday is the best day for taco deals at most locations", "El Charro's carne seca tacos are a Tucson original - must try!", "Penca offers creative vegetarian and vegan taco options", "All listed restaurants accept Tucson Foodie member vouchers"],
     preloaded: true
 };
@@ -260,9 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('searchInput').addEventListener('focus', () => {
-        if (state.searchHistory.length > 0) {
-            showSearchHistory();
-        }
+        showSearchHistory(); // Always show suggestions
     });
 
     document.getElementById('searchInput').addEventListener('blur', () => {
@@ -286,8 +284,14 @@ document.addEventListener('DOMContentLoaded', () => {
         state.searchHistory = JSON.parse(savedHistory);
     }
 
-    // Load preloaded results
+    // Load preloaded results and update open status
     state.results = PRELOADED_RESULTS;
+    // Update open status for all preloaded restaurants
+    state.results.recommendations.forEach(restaurant => {
+        if (restaurant.hours) {
+            restaurant.hours.open = isRestaurantOpen(restaurant.hours);
+        }
+    });
     renderResults();
 
     // Set the initial query in the search input
@@ -322,6 +326,47 @@ function updateTime() {
         hour12: true
     });
     document.getElementById('currentTime').textContent = timeStr;
+}
+
+// Check if restaurant is currently open
+function isRestaurantOpen(hours) {
+    if (!hours || !hours.today) return false;
+    
+    const now = new Date();
+    const currentTime = now.toLocaleString('en-US', {
+        timeZone: 'America/Phoenix',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: false
+    });
+    
+    // Parse hours like "11am-9pm" or "4pm-10pm"
+    const hoursMatch = hours.today.match(/(\d{1,2})(am|pm)-(\d{1,2})(am|pm)/i);
+    if (!hoursMatch) return false;
+    
+    let openHour = parseInt(hoursMatch[1]);
+    const openPeriod = hoursMatch[2].toLowerCase();
+    let closeHour = parseInt(hoursMatch[3]);
+    const closePeriod = hoursMatch[4].toLowerCase();
+    
+    // Convert to 24-hour format
+    if (openPeriod === 'pm' && openHour !== 12) openHour += 12;
+    if (openPeriod === 'am' && openHour === 12) openHour = 0;
+    if (closePeriod === 'pm' && closeHour !== 12) closeHour += 12;
+    if (closePeriod === 'am' && closeHour === 12) closeHour = 0;
+    
+    const currentHour = parseInt(currentTime.split(':')[0]);
+    const currentMinute = parseInt(currentTime.split(':')[1]);
+    const currentTotalMinutes = currentHour * 60 + currentMinute;
+    const openTotalMinutes = openHour * 60;
+    const closeTotalMinutes = closeHour * 60;
+    
+    // Handle cases where closing time is after midnight
+    if (closeTotalMinutes < openTotalMinutes) {
+        return currentTotalMinutes >= openTotalMinutes || currentTotalMinutes < closeTotalMinutes;
+    }
+    
+    return currentTotalMinutes >= openTotalMinutes && currentTotalMinutes < closeTotalMinutes;
 }
 
 // Set up example queries
@@ -378,18 +423,64 @@ function toggleFeature(feature) {
     }
 }
 
-// Show search history
+// Show search suggestions
 function showSearchHistory() {
     const historyEl = document.getElementById('searchHistory');
-    if (state.searchHistory.length === 0) {
-        historyEl.classList.add('hidden');
-        return;
+    const now = new Date();
+    const hour = now.getHours();
+    
+    // Dynamic suggestions based on time of day
+    let suggestions = [];
+    
+    if (hour >= 6 && hour < 11) {
+        suggestions = [
+            "Best breakfast spots open now",
+            "Coffee shops with pastries near me",
+            "Brunch places with outdoor seating",
+            "Gluten-free breakfast options"
+        ];
+    } else if (hour >= 11 && hour < 14) {
+        suggestions = [
+            "Open now for lunch",
+            "Quick lunch spots downtown",
+            "Healthy lunch options under $15",
+            "Best sandwich shops nearby"
+        ];
+    } else if (hour >= 14 && hour < 17) {
+        suggestions = [
+            "Happy hour deals starting soon",
+            "Coffee and dessert spots",
+            "Restaurants with afternoon specials",
+            "Quiet cafes for meetings"
+        ];
+    } else if (hour >= 17 && hour < 22) {
+        suggestions = [
+            "Romantic dinner spots with wine",
+            "Best happy hour deals now",
+            "Family-friendly restaurants open late",
+            "Authentic Mexican with live music"
+        ];
+    } else {
+        suggestions = [
+            "Late night food open now",
+            "24-hour restaurants near me",
+            "Best late night tacos",
+            "Delivery options after midnight"
+        ];
     }
     
+    // Add some always-relevant suggestions
+    suggestions.push(
+        "Restaurants with Tucson Foodie vouchers",
+        "Vegan and vegetarian options",
+        "Dog-friendly patios",
+        "New restaurants this month"
+    );
+    
     historyEl.innerHTML = `
-        <div class="search-history-header">Recent searches</div>
-        ${state.searchHistory.map(query => `
-            <button class="search-history-item" onclick="setQuery('${query.replace(/'/g, "\\'")}')">${query}</button>
+        <div class="search-history-header">Try searching for:</div>
+        ${suggestions.slice(0, 8).map(suggestion => `
+            <button class="search-history-item" onclick="setQuery('${suggestion.replace(/'/g, "\\'")}')">${suggestion}</button>
         `).join('')}
     `;
     historyEl.classList.remove('hidden');
@@ -407,17 +498,31 @@ function buildPrompt(query) {
         .map(r => `${r.name} - ${r.cuisine}, ${r.address}, ${r.priceRange}, ${r.phone}, voucher: ${r.voucher.amount} ${r.voucher.frequency}`)
         .join('\n');
     
-    return `You are a Tucson restaurant expert assistant. Analyze the user's query and recommend appropriate restaurants from the Tucson Foodie partner list.
+    // Detect if query is in Spanish
+    const spanishWords = ['restaurante', 'comida', 'tacos', 'mexicano', 'donde', 'mejor', 'cerca', 'abierto', 'ahora'];
+    const isSpanish = spanishWords.some(word => query.toLowerCase().includes(word));
+    
+    return `You are a fun, enthusiastic Tucson restaurant expert who LOVES helping people discover amazing food! Be colorful and engaging in your descriptions while being helpful and accurate.
+
+${isSpanish ? 'IMPORTANT: The user asked in Spanish, so respond entirely in Spanish, including all restaurant descriptions, tips, and summaries.' : ''}
 
 Query: "${query}"
 Current time: ${timeStr}
 Current day: ${dayStr}
 Current hour (24h): ${hourStr}
 
+STYLE GUIDE:
+- Be enthusiastic and paint a vivid picture of each restaurant
+- Use sensory language (sizzling, aromatic, mouthwatering, etc.)
+- Highlight what makes each place special and unique
+- Make the reader hungry and excited to visit!
+- For reviewSummary: Write like an enthusiastic food critic
+- For whyRecommended: Be specific about why THIS restaurant is perfect for their query
+
 AVAILABLE RESTAURANTS:
 ${restaurantList}
 
-Select 5-8 restaurants that best match the query. Consider cuisine type, location, price range, features, and current time.
+Select 5-8 restaurants that best match the query. Check if they're currently open based on the time.
 
 Return ONLY a valid JSON object with this exact structure:
 {
@@ -554,12 +659,12 @@ async function performSearch() {
         
         const results = JSON.parse(jsonMatch[0]);
         
-        // Enrich results with data from our database
+        // Enrich results with data from our database and update open status
         results.recommendations = results.recommendations.map(rec => {
             const dbData = TUCSON_FOODIE_RESTAURANTS[rec.name];
             if (dbData) {
                 // Merge database data with AI recommendations
-                return {
+                const enrichedRec = {
                     ...rec,
                     phone: dbData.phone,
                     website: dbData.website,
@@ -571,6 +676,15 @@ async function performSearch() {
                         voucherFrequency: dbData.voucher.frequency
                     }
                 };
+                // Update open status
+                if (enrichedRec.hours) {
+                    enrichedRec.hours.open = isRestaurantOpen(enrichedRec.hours);
+                }
+                return enrichedRec;
+            }
+            // Update open status for non-database restaurants too
+            if (rec.hours) {
+                rec.hours.open = isRestaurantOpen(rec.hours);
             }
             return rec;
         });
@@ -766,10 +880,10 @@ function renderListView(restaurants) {
                                         <i data-lucide="map-pin"></i>
                                         ${restaurant.neighborhood}
                                     </span>
-                                    ${restaurant.hours?.open ? `
-                                        <span class="meta-item open-now">
+                                    ${restaurant.hours ? `
+                                        <span class="meta-item ${restaurant.hours.open ? 'open-now' : 'closed-now'}">
                                             <i data-lucide="clock"></i>
-                                            Open Now
+                                            ${restaurant.hours.open ? 'Open Now' : 'Closed'} • ${restaurant.hours.today}
                                         </span>
                                     ` : ''}
                                     <span class="meta-item">${restaurant.atmosphere}</span>

@@ -606,6 +606,11 @@ a:hover {
     font-weight: 600;
 }
 
+.closed-now {
+    color: #dc2626;
+    font-weight: 600;
+}
+
 .dietary-badges {
     display: flex;
     flex-wrap: wrap;
