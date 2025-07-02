@@ -293,7 +293,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Prepopulate search and results
     document.getElementById('searchInput').value = 'Which Mexican restaurants have the best tacos?';
     state.results = PRELOADED_RESULTS;
-    renderResults();
+    console.log('Prepopulating with results:', state.results);
+    
+    // Force show results after a short delay to ensure DOM is ready
+    setTimeout(() => {
+        renderResults();
+        // Force visibility as backup
+        const resultsSection = document.getElementById('resultsSection');
+        if (resultsSection) resultsSection.style.display = 'block';
+    }, 100);
 });
 
 // Save API Key - No longer needed, always use DEMO_API_KEY
