@@ -244,6 +244,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Remove API key modal completely
     const apiKeyModal = document.getElementById('apiKeyModal');
     if (apiKeyModal) {
+        apiKeyModal.style.display = 'none';
+        apiKeyModal.classList.add('hidden');
         apiKeyModal.remove();
     }
 
