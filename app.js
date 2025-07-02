@@ -238,11 +238,14 @@ const exampleQueries = [
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
-    // Check for stored API key or use demo key
-    state.apiKey = localStorage.getItem(API_KEY_STORAGE) || DEMO_API_KEY;
+    // Always use the DEMO_API_KEY
+    state.apiKey = DEMO_API_KEY;
     
-    // Hide API key modal since we have a demo key
-    document.getElementById('apiKeyModal').classList.add('hidden');
+    // Remove API key modal completely
+    const apiKeyModal = document.getElementById('apiKeyModal');
+    if (apiKeyModal) {
+        apiKeyModal.remove();
+    }
 
     // Initialize Lucide icons
     lucide.createIcons();
@@ -299,20 +302,10 @@ document.addEventListener('DOMContentLoaded', () => {
     searchInput.value = "What are some of the best taco restaurants in town?";
 });
 
-// Save API Key
+// Save API Key - No longer needed, always use DEMO_API_KEY
 function saveApiKey() {
-    const apiKey = document.getElementById('apiKeyInput').value.trim();
-    if (apiKey) {
-        state.apiKey = apiKey;
-        localStorage.setItem(API_KEY_STORAGE, apiKey);
-        document.getElementById('apiKeyModal').classList.add('hidden');
-        
-        // Check if there's a preloaded query
-        const searchInput = document.getElementById('searchInput');
-        if (searchInput.value) {
-            searchRestaurants();
-        }
-    }
+    // This function is no longer used
+    // Always using DEMO_API_KEY
 }
 
 // Update current time display
@@ -605,11 +598,8 @@ async function performSearch() {
         return;
     }
     
-    // Check API key
-    if (!state.apiKey) {
-        document.getElementById('apiKeyModal').classList.remove('hidden');
-        return;
-    }
+    // Always use DEMO_API_KEY, no need to check
+    state.apiKey = DEMO_API_KEY;
     
     // Update UI
     state.loading = true;
@@ -1223,9 +1213,10 @@ function showDemoAlert(message) {
     document.getElementById('demoAlert').classList.remove('hidden');
 }
 
-// Show API key modal
+// Show API key modal - No longer needed
 function showApiKeyModal() {
-    document.getElementById('apiKeyModal').classList.remove('hidden');
+    // This function is no longer used
+    // Always using DEMO_API_KEY
 }
 
 // Close demo alert
