@@ -519,7 +519,7 @@ ${restaurantList}
 
 Select 5-8 restaurants that best match the query. Check if they're currently open based on the time.
 
-Return ONLY a valid JSON object with this exact structure:
+CRITICAL: Return ONLY a valid JSON object with NO text before or after. The response must start with { and end with }. Ensure all property values are properly quoted and escaped. Use this exact structure:
 {
   "interpretedQuery": {
     "searchType": "general/deals/dietary/atmosphere/location",
@@ -664,7 +664,22 @@ async function performSearch() {
             throw new Error('No valid JSON found in response');
         }
         
-        const results = JSON.parse(jsonMatch[0]);
+        console.log('Attempting to parse JSON:', jsonMatch[0]);
+        
+        let results;
+        try {
+            results = JSON.parse(jsonMatch[0]);
+        } catch (parseError) {
+            console.error('JSON Parse Error:', parseError);
+            console.error('JSON string that failed:', jsonMatch[0]);
+            // Try to show where the error occurred
+            const errorPosition = parseError.message.match(/position (\d+)/);
+            if (errorPosition) {
+                const pos = parseInt(errorPosition[1]);
+                console.error('Error around:', jsonMatch[0].substring(Math.max(0, pos - 50), pos + 50));
+            }
+            throw parseError;
+        }
         
         // Enrich results with data from our database and update open status
         results.recommendations = results.recommendations.map(rec => {
