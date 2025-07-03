@@ -2,7 +2,7 @@
 // Powered by Gemini 2.5 Flash
 
 // Configuration
-const GEMINI_API_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
+const GEMINI_API_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
 const API_KEY_STORAGE = 'tucsonFoodieApiKey';
 const DEMO_API_KEY = 'AIzaSyC2Dx-duvGW3YwkMhLf9AQHgWKRIiFh0Ps'; // Heavily throttled demo key
 
@@ -525,57 +525,57 @@ CRITICAL RULES FOR JSON RESPONSE:
 6. Ensure all arrays are properly closed with ]
 7. Ensure all objects are properly closed with }
 
-Return this exact JSON structure:
+Return EXACTLY this JSON structure (replace placeholder values with real data):
 {
   "interpretedQuery": {
-    "searchType": "general/deals/dietary/atmosphere/location",
-    "cuisineTypes": ["mexican", "italian", etc],
-    "features": ["outdoor seating", "live music", etc],
-    "priceRange": "budget/moderate/upscale/any",
-    "location": "area mentioned or general",
-    "timeConstraints": ["now", "tonight", etc],
-    "dietary": ["gluten-free", "vegan", etc]
+    "searchType": "general",
+    "cuisineTypes": ["mexican", "italian"],
+    "features": ["outdoor seating", "live music"],
+    "priceRange": "any",
+    "location": "general",
+    "timeConstraints": [],
+    "dietary": []
   },
   "recommendations": [
     {
       "name": "Restaurant Name",
-      "address": "Full address",
-      "neighborhood": "Area",
-      "priceRange": "$",
-      "cuisine": "Type",
+      "address": "311 N Court Ave, Tucson, AZ 85701",
+      "neighborhood": "Downtown",
+      "priceRange": "$$",
+      "cuisine": "Mexican",
       "matchScore": 95,
       "rating": 4.5,
-      "reviewSummary": "Brief description",
-      "atmosphere": "Casual/Upscale/etc",
-      "specialties": ["dish1", "dish2"],
+      "reviewSummary": "Amazing food and atmosphere",
+      "atmosphere": "Casual",
+      "specialties": ["Tacos", "Margaritas"],
       "dietaryOptions": {
-        "glutenFree": true/false,
-        "glutenFreeDetails": "Details if true",
-        "vegan": true/false,
-        "vegetarian": true/false
+        "glutenFree": true,
+        "glutenFreeDetails": "Corn tortillas available",
+        "vegan": false,
+        "vegetarian": true
       },
-      "features": ["feature1", "feature2"],
+      "features": ["outdoor patio", "full bar"],
       "hours": {
         "today": "11am-9pm",
-        "open": true/false,
+        "open": true,
         "happyHour": "3-6pm"
       },
       "tucsonFoodie": {
         "hasVoucher": true,
         "voucherAmount": "$20 off",
         "voucherFrequency": "every 6 months",
-        "latestArticle": "Article title"
+        "latestArticle": "Best Tacos in Tucson"
       },
-      "currentDeals": ["deal1", "deal2"],
-      "whyRecommended": "Reason this matches query",
-      "phone": "phone",
-      "website": "website",
-      "parkingInfo": "Parking details",
-      "reservations": "Recommended/Not needed"
+      "currentDeals": ["Happy hour specials", "Taco Tuesday"],
+      "whyRecommended": "Perfect match for your search",
+      "phone": "(520) 622-1922",
+      "website": "restaurant.com",
+      "parkingInfo": "Street parking available",
+      "reservations": "Recommended"
     }
   ],
-  "searchSummary": "Summary of results",
-  "tips": ["tip1", "tip2"]
+  "searchSummary": "Found great restaurants matching your criteria",
+  "tips": ["Make reservations", "Try the specials"]
 }`;
 }
 
@@ -708,39 +708,7 @@ async function performSearch() {
                 console.error('Error at position', pos, 'character:', jsonString[pos]);
             }
             
-            // If JSON parsing fails, try to use the fallback
-            if (query.toLowerCase().includes('romantic') || query.toLowerCase().includes('dinner')) {
-                console.log('Using romantic dinner fallback results');
-                results = {
-                    interpretedQuery: {
-                        searchType: "atmosphere",
-                        features: ["romantic", "outdoor seating", "dinner"],
-                        priceRange: "any"
-                    },
-                    recommendations: [
-                        {
-                            name: "Vivace",
-                            address: "4310 N Campbell Ave, Tucson, AZ 85718",
-                            neighborhood: "Foothills",
-                            priceRange: "$$$",
-                            cuisine: "Italian",
-                            matchScore: 95,
-                            rating: 4.7,
-                            reviewSummary: "Intimate Italian dining with candlelit tables perfect for romantic evenings.",
-                            atmosphere: "Romantic/Upscale",
-                            whyRecommended: "Perfect for romantic dinners with their beautiful patio, dim lighting, and exceptional Italian cuisine.",
-                            phone: "(520) 795-7221",
-                            website: "vivacetucson.com",
-                            features: ["outdoor patio", "romantic atmosphere", "wine selection"],
-                            hours: { today: "5pm-10pm", open: true }
-                        }
-                    ],
-                    searchSummary: "Found romantic dinner spots with outdoor seating perfect for a special evening.",
-                    tips: ["Make reservations for popular spots", "Request patio seating when booking"]
-                };
-            } else {
-                throw parseError;
-            }
+            throw parseError;
         }
         
         // Enrich results with data from our database and update open status
