@@ -52,12 +52,31 @@ a:hover {
 }
 
 /* Header */
-.header {
+header {
     text-align: center;
+    padding: 2rem 0;
     margin-bottom: 2rem;
 }
 
-.header-badge {
+.header-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.header-content h1 {
+    font-size: 2.5rem;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.header-content p {
+    color: #6b7280;
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+}
+
+/* Live Demo Badge */
+.live-demo-badge {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -67,35 +86,19 @@ a:hover {
     border-radius: 9999px;
     font-weight: 700;
     font-size: 0.875rem;
-    margin-bottom: 0.5rem;
-    animation: pulse 2s infinite;
+    margin-bottom: 1rem;
 }
 
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.8; }
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes slideDown {
-    from { opacity: 0; max-height: 0; }
-    to { opacity: 1; max-height: 1000px; }
-}
-
-.header-brand {
+/* Tucson Foodie Brand */
+.brand-logo {
     background-color: #dc2626;
     color: #fbbf24;
     display: inline-block;
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1.5rem;
     font-weight: 900;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
-    transform: rotate(-2deg);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.025em;
 }
 
 .header-subtitle {
@@ -1224,6 +1227,365 @@ a:hover {
     color: #6b7280;
     text-align: center;
     margin-top: 0.75rem;
+}
+
+/* Restaurant Cards - Clean Design */
+.restaurant-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s;
+}
+
+.restaurant-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.restaurant-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.restaurant-number-circle {
+    width: 40px;
+    height: 40px;
+    background-color: #ef4444;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.restaurant-main-info {
+    flex: 1;
+}
+
+.restaurant-title-line {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+}
+
+.restaurant-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+}
+
+.restaurant-cuisine {
+    color: #6b7280;
+    font-size: 0.95rem;
+}
+
+.voucher-amount {
+    background-color: #10b981;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.rating {
+    color: #f59e0b;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.restaurant-meta-line {
+    display: flex;
+    gap: 16px;
+    color: #6b7280;
+    font-size: 0.875rem;
+    margin-bottom: 8px;
+}
+
+.price-indicator {
+    font-weight: 500;
+}
+
+.restaurant-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.match-percentage {
+    background-color: #fef3c7;
+    color: #d97706;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.match-percentage i {
+    width: 16px;
+    height: 16px;
+}
+
+.favorite-btn {
+    background: none;
+    border: none;
+    color: #d1d5db;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.favorite-btn:hover {
+    background-color: #f3f4f6;
+    color: #ef4444;
+}
+
+.favorite-btn.active {
+    color: #ef4444;
+}
+
+.restaurant-why-recommended {
+    color: #374151;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+.review-quote {
+    background-color: #f9fafb;
+    border-left: 3px solid #ef4444;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-style: italic;
+    color: #4b5563;
+}
+
+.member-deal-card {
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 16px 0;
+}
+
+.member-deal-card i {
+    color: #ef4444;
+    width: 20px;
+    height: 20px;
+}
+
+.deal-content strong {
+    display: block;
+    color: #991b1b;
+    font-size: 0.875rem;
+}
+
+.deal-content p {
+    margin: 0;
+    color: #dc2626;
+    font-weight: 500;
+}
+
+.restaurant-details {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.detail-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.detail-row i {
+    width: 16px;
+    height: 16px;
+    color: #9ca3af;
+}
+
+.detail-row a {
+    color: #3b82f6;
+    text-decoration: none;
+}
+
+.detail-row a:hover {
+    text-decoration: underline;
+}
+
+.text-button {
+    background: none;
+    border: none;
+    color: #3b82f6;
+    cursor: pointer;
+    font-size: 0.875rem;
+    padding: 4px 8px;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.text-button:hover {
+    background-color: #eff6ff;
+}
+
+.text-button i {
+    width: 14px;
+    height: 14px;
+}
+
+.show-more-btn {
+    width: 100%;
+    margin-top: 16px;
+    padding: 8px 16px;
+    background-color: #f3f4f6;
+    border: none;
+    border-radius: 6px;
+    color: #374151;
+    font-size: 0.875rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.2s;
+}
+
+.show-more-btn:hover {
+    background-color: #e5e7eb;
+}
+
+.show-more-btn i {
+    width: 16px;
+    height: 16px;
+}
+
+/* Dietary Badges */
+.dietary-badges {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.dietary-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.dietary-badge.gf {
+    background-color: #f3e8ff;
+    color: #7c3aed;
+}
+
+.dietary-badge.vegan {
+    background-color: #d1fae5;
+    color: #059669;
+}
+
+.dietary-badge.outdoor {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+/* View Controls - Clean Style */
+.view-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 16px 0;
+}
+
+.view-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.view-btn {
+    padding: 8px 16px;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    color: #374151;
+    font-size: 0.875rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+}
+
+.view-btn:hover {
+    background-color: #f9fafb;
+}
+
+.view-btn.active {
+    background-color: #ef4444;
+    color: white;
+    border-color: #ef4444;
+}
+
+.view-btn i {
+    width: 16px;
+    height: 16px;
+}
+
+/* Search Summary */
+.search-summary {
+    background-color: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.summary-content {
+    color: #78350f;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.summary-content p {
+    margin: 0 0 8px 0;
+}
+
+.summary-content strong {
+    color: #92400e;
+}
+
+.tip-bullet {
+    color: #d97706;
+    font-weight: 700;
+    margin-right: 4px;
+}
+
+.result-count {
+    color: #6b7280;
+    font-size: 0.875rem;
+    margin-top: 8px;
 }
 
 /* Utility Classes */

@@ -287,9 +287,6 @@ document.addEventListener('DOMContentLoaded', () => {
         state.searchHistory = JSON.parse(savedHistory);
     }
 
-    // Display all restaurants on page load
-    displayAllRestaurants();
-    
     // Prepopulate search and results
     document.getElementById('searchInput').value = 'Which Mexican restaurants have the best tacos?';
     state.results = PRELOADED_RESULTS;
@@ -885,121 +882,87 @@ function renderListView(restaurants) {
     listEl.innerHTML = restaurants.map((restaurant, idx) => {
         const isFavorite = state.favorites.some(f => f.name === restaurant.name);
         const isExpanded = state.expandedCards[idx];
+        const priceDisplay = '$'.repeat(restaurant.priceRange.length);
         
         return `
             <div class="restaurant-card">
                 <div class="restaurant-header">
-                    <div class="restaurant-info">
-                        <div class="restaurant-title-row">
-                            <div class="restaurant-number">${idx + 1}</div>
-                            <div>
-                                <h3 class="restaurant-title">
-                                    ${restaurant.name}
-                                    <span class="cuisine-tag">(${restaurant.cuisine})</span>
-                                    ${restaurant.tucsonFoodie?.hasVoucher ? `
-                                        <span class="voucher-badge">
-                                            <i data-lucide="tag"></i>
-                                            ${restaurant.tucsonFoodie.voucherAmount}
-                                        </span>
-                                    ` : ''}
-                                    ${restaurant.rating ? `
-                                        <span class="rating-badge">
-                                            <i data-lucide="star"></i>
-                                            ${restaurant.rating}
-                                        </span>
-                                    ` : ''}
-                                </h3>
-                                <div class="restaurant-meta">
-                                    <span class="meta-item">
-                                        <i data-lucide="dollar-sign"></i>
-                                        ${restaurant.priceRange}
-                                    </span>
-                                    <span class="meta-item">
-                                        <i data-lucide="map-pin"></i>
-                                        ${restaurant.neighborhood}
-                                    </span>
-                                    ${restaurant.hours ? `
-                                        <span class="meta-item ${restaurant.hours.open ? 'open-now' : 'closed-now'}">
-                                            <i data-lucide="clock"></i>
-                                            ${restaurant.hours.open ? 'Open Now' : 'Closed'} • ${restaurant.hours.today}
-                                        </span>
-                                    ` : ''}
-                                    <span class="meta-item">${restaurant.atmosphere}</span>
-                                </div>
-                                ${renderDietaryBadges(restaurant)}
-                            </div>
+                    <div class="restaurant-number-circle">${idx + 1}</div>
+                    <div class="restaurant-main-info">
+                        <div class="restaurant-title-line">
+                            <h3 class="restaurant-name">${restaurant.name}</h3>
+                            <span class="restaurant-cuisine">(${restaurant.cuisine})</span>
+                            ${restaurant.tucsonFoodie?.hasVoucher ? `
+                                <span class="voucher-amount">${restaurant.tucsonFoodie.voucherAmount}</span>
+                            ` : ''}
+                            ${restaurant.rating ? `
+                                <span class="rating">⭐ ${restaurant.rating}</span>
+                            ` : ''}
                         </div>
+                        <div class="restaurant-meta-line">
+                            <span class="price-indicator">${priceDisplay}</span>
+                            <span class="neighborhood">${restaurant.neighborhood}</span>
+                            <span class="atmosphere">${restaurant.atmosphere}</span>
+                        </div>
+                        ${renderDietaryBadges(restaurant)}
                     </div>
                     <div class="restaurant-actions">
-                        <div class="match-score">
+                        <div class="match-percentage">
                             <i data-lucide="star"></i>
-                            <span>${restaurant.matchScore}%</span>
+                            ${restaurant.matchScore}%
                         </div>
-                        <button class="favorite-btn ${isFavorite ? 'active' : ''}" onclick="toggleFavorite(${idx})">
+                        <button class="favorite-btn ${isFavorite ? 'active' : ''}" onclick="toggleFavorite(${idx})" aria-label="Add to favorites">
                             <i data-lucide="heart"></i>
                         </button>
                     </div>
                 </div>
                 
-                <p class="restaurant-description">${restaurant.whyRecommended}</p>
+                <p class="restaurant-why-recommended">${restaurant.whyRecommended}</p>
                 
                 ${restaurant.reviewSummary ? `
-                    <div class="review-summary">
-                        <p>"${restaurant.reviewSummary}"</p>
-                    </div>
+                    <blockquote class="review-quote">
+                        <em>"${restaurant.reviewSummary}"</em>
+                    </blockquote>
                 ` : ''}
                 
                 ${restaurant.tucsonFoodie?.hasVoucher ? `
-                    <div class="voucher-info">
-                        <i data-lucide="award"></i>
-                        <div class="voucher-details">
+                    <div class="member-deal-card">
+                        <i data-lucide="tag"></i>
+                        <div class="deal-content">
                             <strong>Tucson Foodie Member Deal</strong>
-                            <p><strong>${restaurant.tucsonFoodie.voucherAmount}</strong> ${restaurant.tucsonFoodie.voucherFrequency}</p>
+                            <p>${restaurant.tucsonFoodie.voucherAmount} ${restaurant.tucsonFoodie.voucherFrequency}</p>
                         </div>
                     </div>
                 ` : ''}
                 
-                <div class="quick-info">
-                    <div class="info-group">
+                <div class="restaurant-details">
+                    <div class="detail-row">
                         <i data-lucide="map-pin"></i>
-                        <div class="info-content">
-                            <p>${restaurant.address}</p>
-                            <div class="info-actions">
-                                <button class="info-link" onclick="copyAddress('${restaurant.address.replace(/'/g, "\\'")}')">
-                                    <i data-lucide="${state.copiedAddress === restaurant.address ? 'check' : 'copy'}"></i>
-                                    ${state.copiedAddress === restaurant.address ? 'Copied!' : 'Copy'}
-                                </button>
-                                <button class="info-link" onclick="getDirections('${restaurant.address.replace(/'/g, "\\'")}')">
-                                    <i data-lucide="external-link"></i>
-                                    Directions
-                                </button>
-                            </div>
-                        </div>
+                        <span>${restaurant.address}</span>
+                        <button class="text-button" onclick="copyAddress('${restaurant.address.replace(/'/g, "\\'")}')">
+                            <i data-lucide="copy"></i> Copy
+                        </button>
+                        <button class="text-button" onclick="getDirections('${restaurant.address.replace(/'/g, "\\'")}')">
+                            <i data-lucide="external-link"></i> Directions
+                        </button>
                     </div>
-                    <div class="contact-info">
-                        <div>
-                            <i data-lucide="phone" style="display: inline; margin-right: 0.5rem;"></i>
-                            <a href="tel:${restaurant.phone}" class="contact-link">${restaurant.phone}</a>
-                        </div>
-                        <div>
-                            <i data-lucide="newspaper" style="display: inline; margin-right: 0.5rem;"></i>
-                            <button class="contact-link" onclick="openTucsonFoodie('${restaurant.name.replace(/'/g, "\\'")}')">
-                                ${restaurant.tucsonFoodie?.latestArticle || 'Find on Tucson Foodie'}
-                                <i data-lucide="external-link"></i>
-                            </button>
-                        </div>
-                        ${restaurant.website ? `
-                            <div>
-                                <i data-lucide="globe" style="display: inline; margin-right: 0.5rem;"></i>
-                                <a href="https://${restaurant.website}" target="_blank" rel="noopener" class="contact-link">
-                                    Website
-                                </a>
-                            </div>
-                        ` : ''}
+                    
+                    <div class="detail-row">
+                        <i data-lucide="phone"></i>
+                        <a href="tel:${restaurant.phone}">${restaurant.phone}</a>
                     </div>
+                    
+                    ${restaurant.website ? `
+                        <div class="detail-row">
+                            <i data-lucide="globe"></i>
+                            <a href="https://${restaurant.website}" target="_blank" rel="noopener">
+                                ${restaurant.website}
+                            </a>
+                        </div>
+                    ` : ''}
                 </div>
                 
-                <button class="expand-btn" onclick="toggleCard(${idx})">
+                <button class="show-more-btn" onclick="toggleCard(${idx})">
                     ${isExpanded ? 'Show less' : 'Show more details'}
                     <i data-lucide="${isExpanded ? 'chevron-up' : 'chevron-down'}"></i>
                 </button>
