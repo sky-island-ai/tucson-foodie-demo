@@ -597,6 +597,13 @@ async function performSearch() {
     const query = document.getElementById('searchInput').value.trim();
     if (!query) return;
     
+    // Clear previous results first
+    state.results = null;
+    const listView = document.getElementById('listView');
+    if (listView) {
+        listView.innerHTML = '<p style="text-align: center; color: #6b7280;">Searching...</p>';
+    }
+    
     // Check cache first
     const cacheKey = query.toLowerCase();
     if (state.searchCache.has(cacheKey)) {
@@ -686,8 +693,15 @@ async function performSearch() {
         // Fix missing commas after string values
         jsonString = jsonString.replace(/"(\s*)\n(\s*)"([^:])/g, '",$1\n$2"$3');
         
-        // Remove any control characters
-        jsonString = jsonString.replace(/[\x00-\x1F\x7F]/g, ' ');
+        // Fix missing commas after closing brackets/braces in objects
+        jsonString = jsonString.replace(/\}(\s*)"([^:])/g, '},$1"$2');
+        jsonString = jsonString.replace(/\](\s*)"([^:])/g, '],$1"$2');
+        
+        // Fix missing commas after values before new properties
+        jsonString = jsonString.replace(/(["\d\}])(\s+)"([^"]+)":/g, '$1,$2"$3":');
+        
+        // Remove any control characters except newlines and tabs
+        jsonString = jsonString.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, ' ');
         
         console.log('Cleaned JSON string:', jsonString);
         
@@ -772,11 +786,15 @@ async function performSearch() {
         }
         showError(errorMsg);
         
-        // Fallback to preloaded results for taco query
-        if (query.toLowerCase().includes('taco') || query.toLowerCase().includes('mexican')) {
-            console.log('Using preloaded results as fallback');
-            state.results = PRELOADED_RESULTS;
-            renderResults();
+        // Clear results on error to prevent showing old results
+        state.results = null;
+        const listView = document.getElementById('listView');
+        if (listView) {
+            listView.innerHTML = '';
+        }
+        const summaryEl = document.querySelector('.summary-content');
+        if (summaryEl) {
+            summaryEl.innerHTML = '';
         }
     } finally {
         state.loading = false;
