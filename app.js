@@ -1292,16 +1292,35 @@ function closeDemoAlert() {
     document.getElementById('demoAlert').classList.add('hidden');
 }
 
-// Set view mode
-function setViewMode(mode) {
+// Update view mode and active button state
+function setViewMode(btnEl, mode) {
+    /*
+     * Accepts:
+     *   btnEl (HTMLElement): the button that triggered the change (can be null)
+     *   mode  ("list" | "map"): desired view mode
+     * The previous implementation relied on the implicit global `event` object,
+     * which is not guaranteed to exist in all browsers (e.g. strict mode) and
+     * breaks when the function is invoked programmatically. Passing the button
+     * reference explicitly makes the API more robust and predictable.
+     */
+
+    // Handle legacy signature where only mode is passed
+    if (typeof btnEl === 'string' && !mode) {
+        mode = btnEl;
+        btnEl = null;
+    }
     state.viewMode = mode;
-    
-    // Update buttons
-    document.querySelectorAll('.view-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    event.target.closest('.view-btn').classList.add('active');
-    
+
+    // Update button UI state
+    document.querySelectorAll('.view-btn').forEach(btn => btn.classList.remove('active'));
+    if (btnEl instanceof HTMLElement) {
+        btnEl.classList.add('active');
+    } else {
+        // Fallback: mark the first matching button as active
+        const fallback = document.querySelector(`.view-btn[onclick*="'${mode}'"]`);
+        if (fallback) fallback.classList.add('active');
+    }
+
     renderResults();
 }
 
