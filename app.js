@@ -2,7 +2,7 @@
 // Powered by Gemini 2.5 Flash
 
 // Configuration
-const GEMINI_API_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+const GEMINI_API_ENDPOINT = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
 const API_KEY_STORAGE = 'tucsonFoodieApiKey';
 const DEMO_API_KEY = 'AIzaSyC2Dx-duvGW3YwkMhLf9AQHgWKRIiFh0Ps'; // Heavily throttled demo key
 
@@ -610,38 +610,53 @@ async function performSearch() {
     searchButton.innerHTML = '<i data-lucide="loader" class="loading"></i><span>Searching...</span>';
     lucide.createIcons();
     
-    // Hide example queries
-    document.getElementById('exampleQueries').classList.add('hidden');
+    // Hide example queries if element exists
+    const exampleQueries = document.getElementById('exampleQueries');
+    if (exampleQueries) exampleQueries.classList.add('hidden');
     
     try {
+        console.log('Starting API request with key:', state.apiKey ? state.apiKey.substring(0, 10) + '...' : 'NO KEY');
+        console.log('API Endpoint:', GEMINI_API_ENDPOINT);
+        
+        const requestBody = {
+            contents: [{
+                parts: [{
+                    text: buildPrompt(query)
+                }]
+            }],
+            generationConfig: {
+                temperature: 0.7,
+                topK: 40,
+                topP: 0.95,
+                maxOutputTokens: 2048,
+            }
+        };
+        
+        console.log('Request body:', JSON.stringify(requestBody, null, 2));
+        
         const response = await fetch(`${GEMINI_API_ENDPOINT}?key=${state.apiKey}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                contents: [{
-                    parts: [{
-                        text: buildPrompt(query)
-                    }]
-                }],
-                generationConfig: {
-                    temperature: 0.7,
-                    topK: 40,
-                    topP: 0.95,
-                    maxOutputTokens: 2048,
-                }
-            })
+            body: JSON.stringify(requestBody)
         });
         
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
+        
         if (!response.ok) {
-            throw new Error(`API request failed: ${response.status}`);
+            const errorText = await response.text();
+            console.error('API Error Response:', errorText);
+            throw new Error(`API request failed: ${response.status} - ${errorText}`);
         }
         
         const data = await response.json();
+        console.log('API Response:', JSON.stringify(data, null, 2));
         
         // Extract JSON from response
         const text = data.candidates[0].content.parts[0].text;
+        console.log('Extracted text:', text);
         
         // Try to parse JSON from the response
         const jsonMatch = text.match(/\{[\s\S]*\}/);
@@ -701,7 +716,23 @@ async function performSearch() {
         
     } catch (error) {
         console.error('Search error:', error);
-        showError('Failed to search restaurants. Please check your API key and try again.');
+        // More detailed error message
+        let errorMsg = 'Failed to search restaurants. ';
+        if (error.message.includes('API request failed')) {
+            errorMsg += 'The API request failed. This could be due to rate limiting or an invalid API key.';
+        } else if (error.message.includes('NetworkError')) {
+            errorMsg += 'Network error. Please check your internet connection.';
+        } else {
+            errorMsg += error.message || 'Please try again.';
+        }
+        showError(errorMsg);
+        
+        // Fallback to preloaded results for taco query
+        if (query.toLowerCase().includes('taco') || query.toLowerCase().includes('mexican')) {
+            console.log('Using preloaded results as fallback');
+            state.results = PRELOADED_RESULTS;
+            renderResults();
+        }
     } finally {
         state.loading = false;
         searchButton.disabled = false;

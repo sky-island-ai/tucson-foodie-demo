@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tucson Foodie - Demo Mode (No API)</title>
+    <link rel="stylesheet" href="styles.css?v=4">
+    <style>
+        /* Ensure visibility */
+        #resultsSection { display: block !important; }
+        #results { display: block !important; }
+        #listView { display: block !important; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <h1><i data-lucide="utensils"></i> Tucson Foodie</h1>
+            <p>Your AI-powered restaurant discovery assistant</p>
+            <p style="color: #ff6b6b; font-size: 0.9em;">Demo Mode - Using Preloaded Results Only</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <div class="container">
+            <!-- Search Section -->
+            <section class="search-section">
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="Ask me anything about Tucson restaurants..." value="Which Mexican restaurants have the best tacos?">
+                    <button id="searchButton" onclick="searchDemo()">
+                        <i data-lucide="search"></i>
+                        <span>Search</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Example Cards -->
+            <section class="examples-section">
+                <h3>Try these searches (demo mode):</h3>
+                <div class="example-cards">
+                    <button class="example-card" onclick="searchDemoQuery('tacos')">
+                        <i data-lucide="search"></i>
+                        <span>Best tacos in Tucson</span>
+                    </button>
+                    <button class="example-card" onclick="searchDemoQuery('romantic')">
+                        <i data-lucide="heart"></i>
+                        <span>Romantic dinner spots</span>
+                    </button>
+                    <button class="example-card" onclick="searchDemoQuery('brunch')">
+                        <i data-lucide="coffee"></i>
+                        <span>Sunday brunch</span>
+                    </button>
+                    <button class="example-card" onclick="searchDemoQuery('pizza')">
+                        <i data-lucide="pizza"></i>
+                        <span>Best pizza</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section id="resultsSection" class="results-section">
+                <div id="viewControls" class="view-controls">
+                    <h2>Search Results</h2>
+                </div>
+                
+                <div id="searchSummary" class="search-summary">
+                    <div class="summary-content"></div>
+                </div>
+                
+                <div id="results" class="results">
+                    <div id="listView" class="list-view">
+                        <!-- Results will be displayed here -->
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="restaurants-data.js?v=4"></script>
+    <script>
+        // Simplified demo state
+        let demoState = {
+            results: null
+        };
+
+        // Demo search function
+        function searchDemo() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            console.log('Demo search for:', query);
+            
+            // Show loading
+            const searchButton = document.getElementById('searchButton');
+            searchButton.disabled = true;
+            searchButton.innerHTML = '<i data-lucide="loader" class="loading"></i><span>Searching...</span>';
+            lucide.createIcons();
+            
+            // Simulate search delay
+            setTimeout(() => {
+                if (query.includes('taco') || query.includes('mexican')) {
+                    showTacoResults();
+                } else if (query.includes('romantic') || query.includes('dinner')) {
+                    showRomanticResults();
+                } else if (query.includes('brunch') || query.includes('breakfast')) {
+                    showBrunchResults();
+                } else if (query.includes('pizza')) {
+                    showPizzaResults();
+                } else {
+                    showTacoResults(); // Default to taco results
+                }
+                
+                // Reset button
+                searchButton.disabled = false;
+                searchButton.innerHTML = '<i data-lucide="search"></i><span>Search</span>';
+                lucide.createIcons();
+            }, 500);
+        }
+
+        // Set search query
+        function searchDemoQuery(type) {
+            const queries = {
+                'tacos': 'Which Mexican restaurants have the best tacos?',
+                'romantic': 'What are some romantic dinner spots?',
+                'brunch': 'Find me a place for Sunday brunch',
+                'pizza': 'Where can I find the best pizza?'
+            };
+            document.getElementById('searchInput').value = queries[type] || queries['tacos'];
+            searchDemo();
+        }
+
+        // Show taco results
+        function showTacoResults() {
+            const results = {
+                searchSummary: "Found 5 amazing taco spots! From El Charro's legendary carne seca to Penca's innovative duck carnitas, these restaurants are serving up taco magic.",
+                recommendations: [
+                    {
+                        name: "El Charro Café Downtown",
+                        address: "311 N Court Ave, Tucson, AZ 85701",
+                        priceRange: "$$",
+                        cuisine: "Mexican",
+                        rating: 4.5,
+                        description: "THE place for authentic tacos! Their legendary carne seca tacos are a religious experience.",
+                        phone: "(520) 622-1922",
+                        voucher: "$20 off every 6 months"
+                    },
+                    {
+                        name: "Penca",
+                        address: "50 E Broadway Blvd, Tucson, AZ 85701",
+                        priceRange: "$$",
+                        cuisine: "Latin American",
+                        rating: 4.6,
+                        description: "Taco heaven for adventurous eaters! Their duck carnitas tacos are pure genius.",
+                        phone: "(520) 203-7681",
+                        voucher: "$20 off every 6 months"
+                    },
+                    {
+                        name: "Calle Tepa",
+                        address: "6151 E Broadway Blvd, Tucson, AZ 85711",
+                        priceRange: "$",
+                        cuisine: "Mexican",
+                        rating: 4.4,
+                        description: "Street taco perfection! Their al pastor is the real deal.",
+                        phone: "(520) 305-4600",
+                        voucher: "$10 off every 90 days"
+                    }
+                ]
+            };
+            displayResults(results);
+        }
+
+        // Show romantic results
+        function showRomanticResults() {
+            const results = {
+                searchSummary: "Perfect romantic restaurants with ambiance! These spots offer intimate settings and exceptional cuisine.",
+                recommendations: [
+                    {
+                        name: "Vivace",
+                        address: "4310 N Campbell Ave, Tucson, AZ 85718",
+                        priceRange: "$$$",
+                        cuisine: "Italian",
+                        rating: 4.7,
+                        description: "Intimate Italian dining with candlelit tables and an extensive wine list.",
+                        phone: "(520) 795-7221",
+                        voucher: "$40 off every 12 months"
+                    }
+                ]
+            };
+            displayResults(results);
+        }
+
+        // Show brunch results
+        function showBrunchResults() {
+            const results = {
+                searchSummary: "Delicious brunch spots to start your Sunday right!",
+                recommendations: [
+                    {
+                        name: "Prep & Pastry",
+                        address: "6450 E Grant Rd, Tucson, AZ 85715",
+                        priceRange: "$$",
+                        cuisine: "American",
+                        rating: 4.5,
+                        description: "Famous for their creative brunch menu and fresh pastries.",
+                        phone: "(520) 838-0050",
+                        voucher: "$20 off every 6 months"
+                    }
+                ]
+            };
+            displayResults(results);
+        }
+
+        // Show pizza results
+        function showPizzaResults() {
+            const results = {
+                searchSummary: "The best pizza in Tucson, from NY-style to artisan wood-fired!",
+                recommendations: [
+                    {
+                        name: "Rocco's Little Chicago",
+                        address: "2707 E Broadway Blvd, Tucson, AZ 85716",
+                        priceRange: "$$",
+                        cuisine: "Pizza",
+                        rating: 4.4,
+                        description: "Authentic Chicago deep dish and thin crust pizzas.",
+                        phone: "(520) 321-1860",
+                        voucher: "$10 off every 90 days"
+                    }
+                ]
+            };
+            displayResults(results);
+        }
+
+        // Display results
+        function displayResults(results) {
+            // Update summary
+            document.querySelector('.summary-content').innerHTML = `<p>${results.searchSummary}</p>`;
+            
+            // Display restaurants
+            const listView = document.getElementById('listView');
+            listView.innerHTML = results.recommendations.map((restaurant, idx) => `
+                <div class="restaurant-card">
+                    <div class="restaurant-header">
+                        <div class="restaurant-info">
+                            <h3>${idx + 1}. ${restaurant.name}</h3>
+                            <p class="restaurant-meta">
+                                ${restaurant.cuisine} • ${restaurant.priceRange} • ⭐ ${restaurant.rating}
+                            </p>
+                            <p class="restaurant-description">${restaurant.description}</p>
+                        </div>
+                    </div>
+                    <div class="restaurant-details">
+                        <p><strong>Address:</strong> ${restaurant.address}</p>
+                        <p><strong>Phone:</strong> ${restaurant.phone}</p>
+                        ${restaurant.voucher ? `<p><strong>Tucson Foodie Deal:</strong> ${restaurant.voucher}</p>` : ''}
+                    </div>
+                </div>
+            `).join('');
+            
+            // Update icons
+            lucide.createIcons();
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+            // Show initial taco results
+            showTacoResults();
+        });
+    </script>
+</body>
+</html>
