@@ -667,6 +667,12 @@ async function performSearch() {
         const data = await response.json();
         console.log('API Response:', JSON.stringify(data, null, 2));
         
+        // Check if response has the expected structure
+        if (!data.candidates || !data.candidates[0] || !data.candidates[0].content || !data.candidates[0].content.parts || !data.candidates[0].content.parts[0]) {
+            console.error('Invalid API response structure:', data);
+            throw new Error('Invalid response from API - missing expected data structure');
+        }
+        
         // Extract JSON from response
         const text = data.candidates[0].content.parts[0].text;
         console.log('Extracted text:', text);
